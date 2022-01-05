@@ -1,3 +1,4 @@
+from scapy import arch, config
 from scapy.all import Ether, ARP, srp
 import platform
 from rich.console import Console
@@ -25,17 +26,10 @@ class ARPScanner:
         self.__saveToFile = saveToFile
         self.__filename = filename
 
-    def __oSystemNic__(self) -> str:
-        match platform.system():
-            case "Windows":
-                return "Intel(R) Dual Band Wireless-N 7260"
-            case "Linux":
-                return "eth0"
-
     def __interface__(self) -> str:
         network_interface: str = self.__nic
         if self.__nic is None:
-            network_interface = self.__oSystemNic__()
+            network_interface = arch.get_working_if().description
         return network_interface
 
     def __ip_range__(self) -> str:
